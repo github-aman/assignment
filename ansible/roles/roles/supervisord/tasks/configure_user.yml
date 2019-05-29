@@ -1,0 +1,14 @@
+---
+
+    - name: Create user to install supervisord
+      user:
+        name: supervisord
+        state: present
+      become: yes
+
+    - name: Create group for supervisord !!
+      group:
+        name: supervisord
+        state: present
+      become: yes
+

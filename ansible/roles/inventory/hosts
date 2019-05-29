@@ -1,0 +1,17 @@
+#[dynamic]
+#dynamic_machine_1
+
+[tag_redisMaster_True]
+
+[tag_redisMaster_False]
+
+
+[redis-master:children]
+tag_redisMaster_True
+
+[redis-slave:children]
+tag_redisMaster_False
+
+[redis:children]
+redis-master
+redis-slave

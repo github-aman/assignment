@@ -1,0 +1,20 @@
+---
+
+
+## Ansible Jinja Templating ##
+
+    - name: Configuring the redis cluster using template !!
+      template: 
+        src: redis.conf.j2
+        dest: /opt/redis-5.0.3/redis.conf
+      tags: redis_conf
+
+    - name: Kill any existing runing process of redis !!
+      copy: 
+        src: files/kill.sh 
+        dest: /opt
+        mode: 0777
+
+    - name: Execute the script !!
+      command: sh /opt/kill.sh
+      ignore_errors: yes

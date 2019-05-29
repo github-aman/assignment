@@ -1,0 +1,10 @@
+---
+- hosts: tag_Name_redis_*:tag_Name_redis_master*:tag_Name_redis_slave*
+  remote_user: ec2-user
+  become: yes
+  gather_facts: true
+
+  tasks:
+
+    - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address'][0]
+

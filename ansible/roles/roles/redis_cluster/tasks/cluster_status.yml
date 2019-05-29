@@ -1,0 +1,10 @@
+---
+ 
+  - name: Check the status of redis in cluster mode !!
+    command: ps -ef | grep redis
+    register: output
+
+  - name: Display output !!
+    debug: var=output.stdout_lines
+    
+

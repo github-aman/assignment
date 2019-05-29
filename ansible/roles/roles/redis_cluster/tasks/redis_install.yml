@@ -1,0 +1,7 @@
+--- 
+
+  - name: Install the redis package !! 
+    command: make install
+    args: 
+      chdir: "{{ redis_directory }}"
+    tags: redis_install 

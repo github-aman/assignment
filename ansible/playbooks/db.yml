@@ -1,0 +1,18 @@
+---
+- hosts: centos_2
+
+  tasks:
+  - name: Ensure apache is running or not
+    service:
+      name: httpd
+      state: started
+    become: yes
+ 
+  - name: Create file at specific location
+    file: 
+      path: /tmp/123.txt
+      mode: 0644
+      owner: centos2_test_user_ansible
+      group: centos2_test_user_ansible
+      state: touch
+

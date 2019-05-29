@@ -1,0 +1,67 @@
+---
+
+#- hosts: tag_Name_redis_*:tag_Name_redis_master*:tag_Name_redis_slave*
+#  become: true
+
+
+## File to make available each node to another nodes & check the cluster status ##
+
+ # tasks: 
+  
+    - name: Meet the nodes each other !!
+      command: "/usr/local/bin/redis-cli -c -p 6380 cluster meet {{ hostvars[item]['ansible_default_ipv4']['address'] }} 6380"
+      with_items: 
+        - "{{ groups['redis'] }}"
+      when: "'redis-master' in group_names"
+         
+      tags: 
+        - test1
+
+    - name: Check cluster info !!
+      command: "/usr/local/bin/redis-cli -p 6380 cluster info"
+      register: cluster_out
+      become: yes
+
+    - debug:
+        var: cluster_out.stdout_lines
+
+#    - name: Assign slots to the nodes !!
+#      command: "{{ item }}"
+#      with_items: 
+#        - for slot in {0..5461}; do "/usr/local/bin/redis-cli -h {{ bind_ip_address }} -p 6379 CLUSTER ADDSLOTS $slot > /dev/null"; done;
+#        - for slot in {5462..10923}; do "/usr/local/bin/redis-cli -h {{ bind_ip_address }} -p 6379 CLUSTER ADDSLOTS $slot > /dev/null"; done;
+#        - for slot in {5462..10923}; do "/usr/local/bin/redis-cli -h {{ bind_ip_address }} -p 6379 CLUSTER ADDSLOTS $slot > /dev/null"; done;
+ 
+    - name: Assign slots test !!
+      command: "for slot in {0..5461}; do /usr/local/bin/redis-cli -h {{ ansible_default_ipv4.address }} -p 6380 CLUSTER ADDSLOTS $slot > /dev/null; done;"
+#      when: "'redis-master' in group_names"#
+      when: inventory_hostname == "'redis-master[0]' in group_names"
+    
+    - name: wait for slot1
+      wait_for: timeout=5
+
+    - name: Assign slot2!!
+      command: "for slot in {5462..10923}; do /usr/local/bin/redis-cli -h {{ ansible_default_ipv4.address }} -p 6380 CLUSTER ADDSLOTS $slot > /dev/null; done;"
+#      when: "'redis-master' in group_names"
+      when: inventory_hostname == redis-master[1]
+    
+    - name: wait for slot2
+      wait_for: timeout=5
+  
+    - name: Assign slot3!!
+      command: "for slot in {10924..16383}; do /usr/local/bin/redis-cli -h {{ ansible_default_ipv4.address }} -p 6380 CLUSTER ADDSLOTS $slot > /dev/null; done;"
+ #     when: "'redis-master' in group_names"
+      when: inventory_hostname == redis-master[2]     
+ 
+    - name: wait for slot3
+      wait_for: timeout=5
+  
+    - name: Check the cluster info again !!
+      command: "/usr/local/bin/redis-cli -p 6380 cluster info"
+      register: cluster1_out
+      become: yes
+  
+    - debug: 
+        var: cluster1_out.stdout_lines
+    
+    

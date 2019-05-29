@@ -1,0 +1,5 @@
+---
+
+  - name: Restart supervisord to apply the changes !!
+    command: /usr/bin/supervisord
+    become: yes

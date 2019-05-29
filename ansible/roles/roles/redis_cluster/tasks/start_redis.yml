@@ -1,0 +1,11 @@
+---
+
+## handlers works on trigger based events, generally used for restarting the services, runs at the end of the role !! 
+  
+  - name: Start all the redis instances & launch the cluster !!
+    shell: nohup ./redis-server ../redis.conf &
+    args: 
+      chdir: "{{ redis_directory }}"
+  #  failed_when: result.rc != 1
+  #  ignore_errors: true
+    tags: restart_cluster

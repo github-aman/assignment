@@ -1,0 +1,24 @@
+---
+
+## Create the redis cluster using master-slave configuration ##
+
+  - name: Creating the redis cluster !!
+    command: "/usr/local/bin/redis-cli --cluster create {{ groups['redis'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(':6380,')}}:6380 --cluster-replicas 1"
+    args: 
+      chdir: "{{ redis_directory }}"
+#    responses: 
+#      Question: Can I set the above configuration? (type 'yes' to accept)
+#        - yes
+    tags: redis_cluster
+    when: "'redis-master' in group_names"
+
+  - name: Check the fully created cluster nodes info !!
+    command: "/usr/local/bin/redis-cli -p 6380 cluster info"
+    register: out_display
+    when: "'redis-master' in group_names"
+ 
+  - name: Display cluster output !!
+    debug: 
+      var: out_display
+    when: "'redis-master' in group_names"
+    

@@ -1,0 +1,19 @@
+---
+ - hosts: "{{ variable_host | default('redis')}}"
+   become: true
+   gather_facts: false
+   pre_tasks:
+    - name: 'install python2'
+      raw: sudo yum install -y python
+   tasks:
+    - name: get hostname
+      command: hostname
+      register: hostname
+    - debug:
+        msg: "{{ hostname }}"
+    - name: for role redis master
+      command: hostname
+      when: "'redis-master' in group_names"
+    - name: for role_redis_slave
+      command: hostname
+      when: "'redis-slave' in group_names"

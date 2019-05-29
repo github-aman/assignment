@@ -1,0 +1,26 @@
+---
+
+  - name: Download  & Unarchiving the redis package !!
+    unarchive:
+      src: http://download.redis.io/releases/redis-5.0.3.tar.gz
+      dest: "{{ download_pkg_directory }}"
+      remote_src: yes 
+
+  - name: Installation of compiling dependencies !!
+    yum: 
+      name: "@Development tools"
+      state: present
+    tags: install_compile_tools
+   
+  - name: Install the tcl with latest version !!
+    yum: 
+      name: tcl
+      state: latest
+    tags: install_tcl
+     
+  - name: Install the ruby package !!
+    yum:  
+      name: ruby
+      state: latest
+    tags: install_ruby
+       

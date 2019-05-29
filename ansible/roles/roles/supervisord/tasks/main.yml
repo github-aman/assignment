@@ -1,0 +1,4 @@
+---
+- include: easy_install.yml
+- include: configure_user.yml
+- include: supervisord_install.yml 

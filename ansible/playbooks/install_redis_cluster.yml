@@ -1,0 +1,86 @@
+---
+- hosts: group_c2_c3
+#  connection: local
+  vars: 
+    redis_port_number: 6379
+    path_to_redis_log_file: "/opt/redis.log"
+    cluster_enabled: "yes"
+    masterip: 192.168.123.11
+    masterport: 6379
+    cluster_config_file: "/opt/cluster.log"
+    protected_mode: "no"
+    slave1: 192.168.123.12
+    slave2: 192.168.123.13
+  
+  tasks:
+
+    - name: Unarchiving the downloaded redis package !!
+      unarchive: 
+        src: http://download.redis.io/releases/redis-5.0.3.tar.gz
+        dest: /opt
+        remote_src: yes
+   
+
+    - name: Install compiling dependencies !!
+      yum: 
+        name: "@Development tools"
+        state: present
+ 
+  
+    - name: Install the tcl8.5 !!
+      yum: 
+        name: tcl
+        state: latest
+ 
+    - name: Install the ruby package !!
+      yum: 
+        name: ruby
+        state: latest
+      tags: install_ruby
+ 
+    - name: Clean the old files built from previous make !!
+      command: make distclean
+      args:
+        chdir: /opt/redis-5.0.3
+
+
+    - name: Compile the packages!!
+      command: make
+      args: 
+        chdir: /opt/redis-5.0.3
+
+        
+    - name: Test the package before installing it!!
+      command: make test
+      args: 
+        chdir: /opt/redis-5.0.3
+      tags: 
+        - testing_phase
+      
+    - name: Install the redis package !!
+      command: make install
+      args: 
+        chdir: /opt/redis-5.0.3
+      tags: 
+        - installing_redis
+
+    - name: Creating & Modifying the redis conf file !!
+      template:
+        src: /home/ansible/ansible_projects/playbooks/redis.conf.j2
+        dest: /opt/redis-5.0.3/redis.conf
+      tags: conf_jinja
+
+    - name: Start the redis servers !!
+      shell: ./redis-server ../redis.conf
+      args: 
+        chdir: /opt/redis-5.0.3/src
+##      ignore_errors: yes 
+#      failed_when: result.rc != 1 
+      tags: start_redis
+      
+  
+    - name: Create the redis cluster !!
+      command: redis-cli --cluster create  "{{ slave1 }}":6380 "{{ slave2 }}":6381 --cluster-replicas 1
+      args: 
+        chdir: /opt/redis-5.0.3/src
+      tags: create_cluster_of_two

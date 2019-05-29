@@ -1,0 +1,7 @@
+---
+
+  - name: Install the python setup tools to get the easy install !!
+    yum:
+      name: python-setuptools
+      state: present
+    become: yes

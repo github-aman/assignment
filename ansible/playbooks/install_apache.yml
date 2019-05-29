@@ -1,0 +1,16 @@
+---
+
+  hosts: 
+
+  tasks: 
+
+    - name: Install apache on the machine
+      yum: 
+        - name: httpd
+          state: latest
+ 
+    - name: Start the service 
+      service:
+        - name: httpd
+          state: restarted
+      

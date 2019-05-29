@@ -1,0 +1,10 @@
+---
+
+#- import_tasks: dependencies.yml
+#- import_tasks: clean_compile_test.yml
+#- import_tasks: redis_install.yml
+- import_tasks: configure_redis.yml
+- import_tasks: start_redis.yml
+#- import_tasks: cluster_status.yml
+- import_tasks: configure_redis_cluster.yml
+- import_tasks: create_redis_cluster.yml

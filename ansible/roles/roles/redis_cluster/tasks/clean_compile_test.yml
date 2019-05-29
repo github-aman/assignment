@@ -1,0 +1,20 @@
+---
+ 
+  - name: Clean the old files built from previous make, if any !!
+    command: make distclean
+    args:  
+      chdir: "{{ redis_directory }}"
+
+  
+  - name: Compile the packages !!
+    command: make
+    args: 
+      chdir: "{{ redis_directory }}"
+    tags: redis_compile
+  
+
+  - name: Test the package before installing it !!
+    command: make test
+    args: 
+      chdir: "{{ redis_directory }}"
+    tags: test_redis_before_install

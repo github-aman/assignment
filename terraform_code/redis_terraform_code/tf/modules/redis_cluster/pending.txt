@@ -1,0 +1,14 @@
+T/AWS
+
+1:- Create a SG for master & slave EC2.
+2:- Assign tag names to resources if required.
+
+
+J/T/A
+
+3:- Connect Terraform with Jenkins.
+4:- Launch infra using jenkins job.
+5:- Run Ansible role to create redis cluster
+6:- Confirm the redis cluster working.
+7:- Create the dsl job.
+8:- Create the backup & restore jobs for redis cluster.

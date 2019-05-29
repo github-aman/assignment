@@ -1,0 +1,13 @@
+---
+- hosts: centos_2
+
+  tasks:
+    - name: Store the remote machine directory content
+      command: /bin/ls /tmp
+      register: output 
+  
+    - name: Display remote machine directory content
+      debug: 
+        var: output.stdout_lines
+     
+

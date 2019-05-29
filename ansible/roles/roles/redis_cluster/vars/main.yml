@@ -1,0 +1,21 @@
+---
+
+## User can add the variables as per their requirement ##
+## One should add the master slave configuration here to increase the cluster ##
+  
+  download_pkg_directory: /opt
+  redis_port_number: 6380
+  redis_directory: "/opt/redis-5.0.3/src"
+  path_to_redis_log_file: "/var/log/redis.log"
+  cluster_enabled: "yes"
+  #masterip: 192.168.123.11
+  masterport: 6379
+  cluster_log_file: "/var/log/cluster.log"
+  protected_mode: "no" 
+  #master1: 192.168.123.11
+  #slave1: 192.168.123.12
+  #slave2: 192.168.123.13
+# bind_ip_address: "{{ inventory_hostname }}"
+# bind_ip_address: "{{ ansible_default_ipv4.address }}"
+ # bind_ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+  bind_ip_address: 0.0.0.0

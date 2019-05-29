@@ -1,0 +1,30 @@
+---
+
+      - name: Install supervisord using easy install !!
+        easy_install:
+          name: supervisor
+          state: latest
+        become: yes
+
+      
+      - name: Create directory for configuration file !!
+        file:
+          path: /etc/supervisor
+          state: directory
+          mode: 0755
+        become: yes
+
+
+      - name: Create configuration file structure for supervisord !!
+        file:
+          path: /etc/supervisord.conf
+          state: touch
+          mode: 0644
+        become: yes
+
+   
+      - name: Generate supervisord configuration file from installed utility !!
+        shell: echo_supervisord_conf > /etc/supervisor/supervisord.conf
+        args:
+          chdir: /usr/bin
+        become: yes
